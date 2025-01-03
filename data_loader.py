@@ -17,9 +17,19 @@ COLOR_MAP = {
 }
 
 
-def dowload_dataset():
-    path = kagglehub.dataset_download("balraj98/deepglobe-land-cover-classification-dataset")
-    print(path)
+def dowload_dataset(destination_folder="datasets"):
+    """
+    Faz o download do dataset do Kaggle e salva na pasta especificada.
+    
+    :param destination_folder: Caminho para a pasta onde o dataset será salvo.
+    :return: Caminho do dataset baixado.
+    """
+    os.makedirs(destination_folder, exist_ok=True)  # Cria a pasta, se necessário
+    path = kagglehub.dataset_download(
+        "balraj98/deepglobe-land-cover-classification-dataset", 
+        path=destination_folder
+    )
+    print(f"Dataset baixado em: {path}")
     return path
 
 def load_image_mask_pairs(base_path):
@@ -118,7 +128,7 @@ def build_tf_dataset(image_mask_list, batch_size=8, shuffle=True, buffer_size=10
 
 
 def get_dataset():
-    path = dowload_dataset()
+    path = dowload_dataset('datasets')
     path_train = f"{path}/train"
     image_mask_pairs = load_image_mask_pairs(path_train)
 

@@ -19,7 +19,9 @@ def get_trained_model(model_name):
 
 def get_processed_gee_data(model_name, predictions_folder):
     gee_output_folder = os.path.join('exports', 'gee_output')
+    
     # fetch_gee_data_with_shp(output_folder=gee_output_folder)
+    
     mosaic_path_tif = os.path.join('exports', predictions_folder ,f"{model_name}.tif")
     generate_tif_mosaic(input_folder=gee_output_folder, output_path=mosaic_path_tif)
     mosaic_path_png = os.path.join('exports', predictions_folder ,f"{model_name}.png")
@@ -30,7 +32,7 @@ def get_processed_gee_data(model_name, predictions_folder):
 
 def main():
     # define constants
-    model_name = 'meu_modelo'
+    model_name = 'meu_modelo_v2_batch_4'
     predictions_folder = f"{model_name}_predictions"
 
     # cria o diretorio caso nao exista
@@ -40,7 +42,7 @@ def main():
     # get dataset and train model
     trained_model = get_trained_model(model_name)
 
-    # # get and process gee data
+    # get and process gee data
     mosaic_path_png, mosaic_path_tif = get_processed_gee_data(model_name, predictions_folder)
 
     # predict
