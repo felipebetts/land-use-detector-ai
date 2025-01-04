@@ -1,7 +1,7 @@
 import os
 from tensorflow.keras.models import load_model
 
-from data_loader import get_dataset
+from data_loader import get_dataset, BATCH_SIZE
 from train import train_model
 from gee import fetch_gee_data_with_shp
 from mosaic import generate_tif_mosaic
@@ -10,12 +10,20 @@ from predict import predict
 from crop_raster import crop_raster_with_shapefile
 from results import get_results
 
-def get_trained_model(model_name):
-    # train_dataset, test_dataset = get_dataset()
-    # trained_model_path = train_model(train_dataset, test_dataset, model_name, epochs=30)
-    trained_model_path = os.path.join('trained_models', f"{model_name}.h5")
-    trained_model = load_model(trained_model_path)
-    return trained_model
+EPOCHS = 20
+
+def get_trained_model(model_name, predictions_folder):
+    train_dataset, test_dataset = get_dataset()
+    trained_model_path = train_model(train_dataset, test_dataset, model_name, epochs=EPOCHS, predictions_folder=predictions_folder)
+    # trained_model_path = os.path.join('trained_models', f"{model_name}.h5")
+    print('trained_model_path:', trained_model_path)
+    try:
+        trained_model = load_model(trained_model_path)
+        return trained_model
+    except Exception as e:
+        print(f"Erro ao carregar o modelo: {e}")
+        raise
+        
 
 def get_processed_gee_data(model_name, predictions_folder):
     gee_output_folder = os.path.join('exports', 'gee_output')
@@ -32,7 +40,9 @@ def get_processed_gee_data(model_name, predictions_folder):
 
 def main():
     # define constants
-    model_name = 'meu_modelo_v2_batch_4'
+    model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_v4"
+    # model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_weighed"
+    # model_name = "meu_modelo_v2_batch_4"
     predictions_folder = f"{model_name}_predictions"
 
     # cria o diretorio caso nao exista
@@ -40,7 +50,7 @@ def main():
     os.makedirs(predictions_folder_path, exist_ok=True)
 
     # get dataset and train model
-    trained_model = get_trained_model(model_name)
+    trained_model = get_trained_model(model_name, predictions_folder_path)
 
     # get and process gee data
     mosaic_path_png, mosaic_path_tif = get_processed_gee_data(model_name, predictions_folder)
