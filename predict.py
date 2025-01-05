@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 import numpy as np
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
@@ -19,7 +19,7 @@ class_colors_rgb = [
 class_colors = [tuple(c/255 for c in rgb) for rgb in class_colors_rgb]
 cmap = mcolors.ListedColormap(class_colors, name='LandCoverMap')
 norm = mcolors.BoundaryNorm(range(len(class_labels)+1), len(class_labels))
-model_default = load_model('trained_models/meu_modelo_v2.h5')
+model_default = tf.keras.models.load_model('trained_models/meu_modelo_v2.h5')
 
 def file_basename(path):
     return os.path.splitext(os.path.basename(path))[0]

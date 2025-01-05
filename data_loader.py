@@ -5,7 +5,7 @@ import kagglehub
 from sklearn.model_selection import train_test_split
 
 TEST_SIZE = 0.2  # Fração do dataset para TEST
-BATCH_SIZE = 16 # Ajuste conforme necessidade
+BATCH_SIZE = 12 # Ajuste conforme necessidade
 COLOR_MAP = {
     (0,   255, 255): 0,  # Urban land
     (255, 255, 0  ): 1,  # Agriculture

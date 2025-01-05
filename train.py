@@ -1,6 +1,7 @@
 import os
 import math
 import matplotlib.pyplot as plt
+import csv
 
 from data_loader import BATCH_SIZE
 from model import get_compiled_model
@@ -11,6 +12,8 @@ N = 642
 def train_model(train_dataset, test_dataset, trained_model_name, epochs=EPOCHS, predictions_folder="exports"):
     model = get_compiled_model()
     steps_per_epoch = math.ceil(N / BATCH_SIZE)
+
+    
     
     history = model.fit(
         train_dataset,
