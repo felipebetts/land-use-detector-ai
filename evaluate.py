@@ -156,10 +156,10 @@ if __name__ == "__main__":
     # Carrega modelo e dataset de teste
     saved_model_path = f"trained_models/{model_name}.h5"
     model = tf.keras.models.load_model(saved_model_path)
-    _, test_dataset = get_dataset()
+    train_dataset, test_dataset = get_dataset()
 
     # Avalia o modelo
-    metrics, cm = evaluate_model_on_dataset(model, test_dataset)
+    metrics, cm = evaluate_model_on_dataset(model, train_dataset)
 
     # Exibe resultados
     print("\n=== Métricas de Avaliação ===")

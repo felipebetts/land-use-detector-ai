@@ -11,7 +11,7 @@ from predict import predict
 from crop_raster import crop_raster_with_shapefile
 from results import get_results
 
-EPOCHS = 25
+EPOCHS = 250
 
 def get_trained_model(model_name, predictions_folder):
     train_dataset, test_dataset = get_dataset()
@@ -41,7 +41,7 @@ def get_processed_gee_data(model_name, predictions_folder):
 
 def main():
     # define constants
-    model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_v3"
+    model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_v4"
     # model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_weighed"
     # model_name = "meu_modelo_v2_batch_4"
     predictions_folder = f"{model_name}_predictions"
