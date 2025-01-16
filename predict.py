@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 
-
+from constants import TILE_SIZE
 from divide_mosaic import divide_image_with_padding, recompose_image
 
 # Definições das classes
@@ -27,7 +27,7 @@ def file_basename(path):
 def process_image_png(image_path):
     img = Image.open(image_path).convert('RGB')
     print(f"Dimensões da imagem original: {img.size}")
-    # img = img.resize((256, 256))  # Ajuste ao tamanho de entrada do modelo
+    # img = img.resize((TILE_SIZE, TILE_SIZE))  # Ajuste ao tamanho de entrada do modelo
     img_array = np.array(img) / 255.0  # Normalizar
     img_array = np.expand_dims(img_array, axis=0)  # Adicionar dimensão do batch
     return img_array

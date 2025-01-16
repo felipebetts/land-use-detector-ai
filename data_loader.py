@@ -4,6 +4,8 @@ import tensorflow as tf
 import kagglehub
 from sklearn.model_selection import train_test_split
 
+from constants import TILE_SIZE
+
 TEST_SIZE = 0.2  # Fração do dataset para TEST
 BATCH_SIZE = 12 # Ajuste conforme necessidade
 COLOR_MAP = {
@@ -79,7 +81,7 @@ def remap_mask_rgb(mask_rgb):
     return mask_indices[..., tf.newaxis]
 
 
-def parse_image_mask(img_path, mask_path, target_size=(256, 256)):
+def parse_image_mask(img_path, mask_path, target_size=(TILE_SIZE, TILE_SIZE)):
     """
     Lê a imagem e a máscara do disco, redimensiona e normaliza para 0-1.
     """
