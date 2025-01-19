@@ -1,6 +1,6 @@
 # Land Use Detector AI
 
-This project implements an artificial intelligence system for land use classification in satellite images, focusing on any given area from a shapefile. The goal is to providie a detailed analysis of land use and cover.
+This project implements an artificial intelligence system for land use classification in satellite images, focusing on any given area from a shapefile. The goal is to provide a detailed analysis of land use and cover.
 
 ## Features
 
