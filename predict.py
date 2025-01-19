@@ -1,12 +1,12 @@
 import os
 from PIL import Image
 import numpy as np
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 
-
+from constants import TILE_SIZE
 from divide_mosaic import divide_image_with_padding, recompose_image
 
 # Definições das classes
@@ -19,7 +19,7 @@ class_colors_rgb = [
 class_colors = [tuple(c/255 for c in rgb) for rgb in class_colors_rgb]
 cmap = mcolors.ListedColormap(class_colors, name='LandCoverMap')
 norm = mcolors.BoundaryNorm(range(len(class_labels)+1), len(class_labels))
-model_default = load_model('trained_models/meu_modelo_v2.h5')
+model_default = tf.keras.models.load_model('trained_models/meu_modelo_v2.h5')
 
 def file_basename(path):
     return os.path.splitext(os.path.basename(path))[0]
@@ -27,7 +27,7 @@ def file_basename(path):
 def process_image_png(image_path):
     img = Image.open(image_path).convert('RGB')
     print(f"Dimensões da imagem original: {img.size}")
-    # img = img.resize((256, 256))  # Ajuste ao tamanho de entrada do modelo
+    # img = img.resize((TILE_SIZE, TILE_SIZE))  # Ajuste ao tamanho de entrada do modelo
     img_array = np.array(img) / 255.0  # Normalizar
     img_array = np.expand_dims(img_array, axis=0)  # Adicionar dimensão do batch
     return img_array

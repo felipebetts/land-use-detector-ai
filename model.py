@@ -1,6 +1,8 @@
 from keras import layers, Input, Model
 
-def unet_model(input_shape=(256, 256, 3), num_classes=7):
+from constants import TILE_SIZE
+
+def unet_model(input_shape=(TILE_SIZE, TILE_SIZE, 3), num_classes=7):
     """
     U-Net para segmentação semantica.
     """
@@ -43,7 +45,7 @@ def unet_model(input_shape=(256, 256, 3), num_classes=7):
 
 def get_compiled_model():
     num_classes = 7  
-    model = unet_model(input_shape=(256, 256, 3), num_classes=num_classes)
+    model = unet_model(input_shape=(TILE_SIZE, TILE_SIZE, 3), num_classes=num_classes)
     model.summary()
 
     # Compilar o modelo

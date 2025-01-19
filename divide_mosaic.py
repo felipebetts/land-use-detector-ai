@@ -1,8 +1,10 @@
 from PIL import Image
 import os
 
+from constants import TILE_SIZE
 
-def divide_image_with_padding(image_path, output_folder, tile_size=256):
+
+def divide_image_with_padding(image_path, output_folder, tile_size=TILE_SIZE):
     # Carregar a imagem
     img = Image.open(image_path)
     width, height = img.size
@@ -42,7 +44,7 @@ def divide_image_with_padding(image_path, output_folder, tile_size=256):
     return tiles_paths
 
 
-def recompose_image(tiles_folder, output_path, original_size, tile_size=256):
+def recompose_image(tiles_folder, output_path, original_size, tile_size=TILE_SIZE):
     """
     Recompoe os tiles em uma única imagem com o tamanho original.
 
@@ -50,7 +52,7 @@ def recompose_image(tiles_folder, output_path, original_size, tile_size=256):
         tiles_folder (str): Pasta onde os tiles estão armazenados.
         output_path (str): Caminho para salvar a imagem recomposta.
         original_size (tuple): Tamanho original da imagem (largura, altura).
-        tile_size (int): Tamanho dos tiles (padrão: 256x256).
+        tile_size (int): Tamanho dos tiles (padrão: TILE_SIZExTILE_SIZE).
     """
     original_width, original_height = original_size
     tiles_x = (original_width + tile_size - 1) // tile_size
@@ -90,7 +92,7 @@ def main():
     divide_image_with_padding(
         image_path="exports/mosaico_final.png", 
         output_folder="mosaico_tiles", 
-        tile_size=256
+        tile_size=TILE_SIZE
     )
 
 if __name__ == '__main__':

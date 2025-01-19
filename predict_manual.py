@@ -5,6 +5,8 @@ import rasterio
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
+from constants import TILE_SIZE
+
 # Definições das classes
 class_labels = ["Urbano", "Agricultura", "Pastagem", "Floresta", "Água", "Descampado", "Desconhecido"]
 class_colors_rgb = [
@@ -23,7 +25,7 @@ model = load_model('trained_models/meu_modelo.h5')
 def process_image_png(image_path):
     img = Image.open(image_path).convert('RGB')
     print(f"Dimensões da imagem original: {img.size}")
-    img = img.resize((256, 256))  # Ajuste ao tamanho de entrada do modelo
+    img = img.resize((TILE_SIZE, TILE_SIZE))  # Ajuste ao tamanho de entrada do modelo
     img_array = np.array(img) / 255.0  # Normalizar
     img_array = np.expand_dims(img_array, axis=0)  # Adicionar dimensão do batch
     return img_array
@@ -35,7 +37,7 @@ def process_image_tif(image_path):
         img = src.read([4, 3, 2])  # Carregar bandas RGB
         img = np.moveaxis(img, 0, -1)  # Rearranjar para [Altura, Largura, Bandas]
         img = np.clip(img, 0, 255) / 255.0  # Normalizar
-        img = np.resize(img, (256, 256, 3))  # Redimensionar
+        img = np.resize(img, (TILE_SIZE, TILE_SIZE, 3))  # Redimensionar
     return np.expand_dims(img, axis=0)  # Adicionar dimensão do batch
 
 # Função para fazer predição e visualizar o resultado
