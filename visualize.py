@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import keras
+from PIL import Image
 from data_loader import get_dataset
 
 def visualize_prediction(model, dataset, num_samples=3):
@@ -58,8 +59,65 @@ def visualize_prediction(model, dataset, num_samples=3):
             plt.show()
 
 
-saved_model = keras.models.load_model('trained_models/meu_modelo_v2_20_epochs.h5')
+
+def plot_image_and_mask(image_path, mask_path):
+    """
+    Plota uma imagem e sua máscara predita com a legenda correspondente.
+    
+    Args:
+        image_path (str): Caminho para a imagem original.
+        mask_array (np.ndarray): Máscara predita (array 2D com valores de classe).
+    """
+    # Definições das classes
+    class_labels = ["Urbano", "Agricultura", "Pastagem", "Floresta", "Água", "Descampado", "Desconhecido"]
+    class_colors_rgb = [
+        (0, 255, 255), (255, 255, 0), (255, 0, 255),
+        (0, 255, 0), (0, 0, 255), (255, 255, 255),
+        (0, 0, 0),
+    ]
+    class_colors = [tuple(c/255 for c in rgb) for rgb in class_colors_rgb]
+    cmap = mcolors.ListedColormap(class_colors, name='LandCoverMap')
+    norm = mcolors.BoundaryNorm(range(len(class_labels) + 1), len(class_labels))
+
+    # Carregar a imagem original
+    image = Image.open(image_path)
+
+    # Carregar a máscara
+    mask_image = Image.open(mask_path)
+    mask_array = np.array(mask_image)
+
+    plt.figure(figsize=(14, 6))
+
+    # Subplot para a imagem original
+    plt.subplot(1, 3, 1)
+    plt.title("Imagem de Satélite")
+    plt.imshow(image)
+    plt.axis('off')
+
+    # Subplot para a máscara predita
+    plt.subplot(1, 3, 2)
+    plt.title("Máscara")
+    img_plot = plt.imshow(mask_array, cmap=cmap, norm=norm)
+    plt.axis('off')
+
+    # Subplot para a legenda (colorbar)
+    plt.subplot(1, 3, 3)
+    plt.axis('off')
+    cbar = plt.colorbar(img_plot, ticks=range(len(class_labels)), orientation='vertical')
+    cbar.ax.set_yticklabels(class_labels)
+
+    plt.tight_layout()
+    plt.show()
+
+
+saved_model = keras.models.load_model('trained_models/model_30_epochs.h5')
 _, test_dataset = get_dataset()
 
-# Visualizar alguns resultados
+# # Visualizar alguns resultados
 visualize_prediction(saved_model, test_dataset, num_samples=6)
+
+# if __name__ == "__main__":
+#     image_id = "21717"
+#     image_path = f"/home/felipebetts/.cache/kagglehub/datasets/balraj98/deepglobe-land-cover-classification-dataset/versions/2/train/{image_id}_sat.jpg"
+#     mask_path = f"/home/felipebetts/.cache/kagglehub/datasets/balraj98/deepglobe-land-cover-classification-dataset/versions/2/train/{image_id}_mask.png"
+#     plot_image_and_mask(image_path, mask_path)

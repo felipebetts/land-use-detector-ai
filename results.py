@@ -81,9 +81,31 @@ def analyze_mask_distribution(mask_image_path, class_labels, class_colors_rgb, i
     # Logs
     print(f"Total de pixels na imagem: {total_pixels}")
     print(f"Total de pixels não pretos (relevantes): {relevant_pixels}")
+    print(f"Total de pixels pretos: {total_pixels - relevant_pixels}")
 
     if relevant_pixels == 0:
         raise ValueError("A máscara não contém pixels válidos para análise.")
+    
+    # teste
+    
+    # Inicializar dicionário para contagem de pixels por cor
+    color_distribution = {}
+
+    # Obter as cores únicas presentes na máscara
+    unique_colors, counts = np.unique(mask_array.reshape(-1, 3), axis=0, return_counts=True)
+
+    for color, count in zip(unique_colors, counts):
+        color_tuple = tuple(color)
+        if color_tuple == ignore_color:
+            continue  # Ignorar a cor especificada
+        color_distribution[color_tuple] = count
+
+    # Print do dicionário com as contagens
+    print(f"Distribuição de cores na máscara: {color_distribution}")
+    
+    # teste
+
+
 
     # Criar um dicionário para armazenar os resultados
     class_distribution = {label: 0 for label in class_labels}
@@ -170,7 +192,7 @@ def get_results(model_name):
     
     # Caminho para a máscara
     predictions_folder = f"{model_name}_predictions"
-    mask_image_path = os.path.join('exports', predictions_folder, 'output.png')
+    mask_image_path = os.path.join('exports', predictions_folder, f"{model_name}_cropped.png")
     
     # Realizar a análise de distribuição
     distribution = analyze_mask_distribution(mask_image_path, class_labels, class_colors_rgb)
@@ -188,7 +210,7 @@ def get_results(model_name):
     scientific_statistical_analysis(distribution, statistical_analysis_folder)
 
 def main():
-    model_name = 'meu_modelo'
+    model_name = 'model_batch_12_epochs_250_v3'
     # model_name = 'model_30_epochs'
     get_results(model_name)
     

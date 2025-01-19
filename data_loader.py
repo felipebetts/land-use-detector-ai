@@ -5,7 +5,7 @@ import kagglehub
 from sklearn.model_selection import train_test_split
 
 TEST_SIZE = 0.2  # Fração do dataset para TEST
-BATCH_SIZE = 8   # Ajuste conforme necessidade
+BATCH_SIZE = 16 # Ajuste conforme necessidade
 COLOR_MAP = {
     (0,   255, 255): 0,  # Urban land
     (255, 255, 0  ): 1,  # Agriculture
@@ -27,7 +27,7 @@ def dowload_dataset(destination_folder="datasets"):
     os.makedirs(destination_folder, exist_ok=True)  # Cria a pasta, se necessário
     path = kagglehub.dataset_download(
         "balraj98/deepglobe-land-cover-classification-dataset", 
-        path=destination_folder
+        # path=destination_folder
     )
     print(f"Dataset baixado em: {path}")
     return path
@@ -52,6 +52,14 @@ def remap_mask_rgb(mask_rgb):
     2) Para cada pixel, converte (R,G,B) => índice de classe [0..6].
     """
     binarized = tf.where(mask_rgb < 128, 0, 255)  # [H, W, 3]
+
+    # Adicione este log após a binarização da máscara
+    if tf.reduce_any(~tf.reduce_any(
+        [tf.reduce_all(tf.equal(binarized, [r, g, b]), axis=-1) for (r, g, b) in COLOR_MAP.keys()],
+        axis=0
+    )):
+        print("[Erro] A máscara contém pixels não mapeados para nenhuma classe em COLOR_MAP.")
+
 
     h, w = tf.shape(binarized)[0], tf.shape(binarized)[1]
     mask_indices = tf.zeros([h, w], dtype=tf.uint8)
@@ -88,6 +96,11 @@ def parse_image_mask(img_path, mask_path, target_size=(256, 256)):
     mask = remap_mask_rgb(mask)
     mask = tf.cast(mask, tf.uint8)  # final [H,W,1], cada pixel [0..6]
 
+    # Adicione após o remapeamento da máscara
+    if tf.reduce_any(mask < 0) or tf.reduce_any(mask >= len(COLOR_MAP)):
+        print("[Erro] Máscara contém valores fora do intervalo válido após remapeamento.")
+
+
     return img, mask
 
 def augment_image_mask(img, mask):
@@ -122,7 +135,7 @@ def build_tf_dataset(image_mask_list, batch_size=8, shuffle=True, buffer_size=10
     
     if shuffle:
         dataset = dataset.shuffle(buffer_size)
-    dataset = dataset.batch(batch_size)
+    dataset = dataset.batch(batch_size, drop_remainder=True)
     dataset = dataset.prefetch(tf.data.AUTOTUNE)
     return dataset
 
