@@ -1,4 +1,4 @@
-from keras import layers, Input, Model
+from keras import layers, Input, Model, utils
 
 from constants import TILE_SIZE
 
@@ -56,3 +56,6 @@ def get_compiled_model():
     )
     return model
 
+if __name__ == "__main__":
+    model = unet_model()
+    utils.plot_model(model, show_shapes=True)

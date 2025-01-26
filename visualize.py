@@ -25,7 +25,10 @@ def visualize_prediction(model, dataset, num_samples=3):
         preds_argmax = np.argmax(preds, axis=-1)  # [batch, H, W]
         true_masks = masks.numpy()                # [batch, H, W, 1]
 
-        for i in range(num_samples):
+        # Selecionar índices aleatórios
+        random_indices = np.random.choice(len(images), size=num_samples, replace=False)
+
+        for i in random_indices:
             plt.figure(figsize=(14,4))
 
             # 1) Imagem original
@@ -167,6 +170,13 @@ def plot_mask_and_label(mask_path):
 # # # Visualizar alguns resultados
 # visualize_prediction(saved_model, test_dataset, num_samples=6)
 
+
+def main():
+    model = keras.models.load_model('trained_models/model_30_epochs.h5')
+    _, test_dataset = get_dataset()
+    visualize_prediction(model, test_dataset, num_samples=6)
+
+
 if __name__ == "__main__":
     # image_id = "21717"
     # image_path = f"/home/felipebetts/.cache/kagglehub/datasets/balraj98/deepglobe-land-cover-classification-dataset/versions/2/train/{image_id}_sat.jpg"
@@ -176,6 +186,8 @@ if __name__ == "__main__":
     # mask_path = "exports/model_batch_12_epochs_250_v3_predictions/model_batch_12_epochs_250_v3_cropped.png"
     # plot_mask_and_label(mask_path)
 
-    image_path = "exports/model_batch_12_epochs_250_v3_predictions/originals/tile_11_5.png"
-    mask_path = "exports/model_batch_12_epochs_250_v3_predictions/masks/tile_11_5.png"
-    plot_image_and_mask(image_path, mask_path)
+    # tile = 'tile_15_3'
+    # image_path = f"exports/model_batch_12_epochs_250_v3_predictions/originals/{tile}.png"
+    # mask_path = f"exports/model_batch_12_epochs_250_v3_predictions/masks/{tile}.png"
+    # plot_image_and_mask(image_path, mask_path)
+    main()
