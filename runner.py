@@ -1,6 +1,22 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Desativa todas as GPUs
 import tensorflow as tf
 
+# gpus = tf.config.list_physical_devices('GPU')
+# if gpus:
+#     try:
+#         # Habilitar alocação sob demanda
+#         for gpu in gpus:
+#             tf.config.experimental.set_memory_growth(gpu, True)
+        
+#         # Definir limite fixo de memória, se necessário (em MB)
+#         tf.config.set_logical_device_configuration(
+#             gpus[0], 
+#             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)]  # 4GB de limite
+#         )
+#         print("Configuração de memória da GPU definida com sucesso!")
+#     except RuntimeError as e:
+#         print("Erro ao configurar a GPU:", e)
 
 from data_loader import get_dataset, BATCH_SIZE
 from train import train_model
@@ -12,7 +28,9 @@ from crop_raster import crop_raster_with_shapefile
 from results import get_results
 from constants import TILE_SIZE
 
-EPOCHS = 25
+EPOCHS = 10
+
+
 
 def get_trained_model(model_name, predictions_folder):
     train_dataset, test_dataset = get_dataset()
@@ -42,7 +60,7 @@ def get_processed_gee_data(model_name, predictions_folder):
 
 def main():
     # define constants
-    model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_v5_tilesize_{TILE_SIZE}"
+    model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_v6_tilesize_{TILE_SIZE}"
     # model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_v4"
     # model_name = f"model_batch_{BATCH_SIZE}_epochs_{EPOCHS}_weighed"
     # model_name = "meu_modelo_v2_batch_4"
