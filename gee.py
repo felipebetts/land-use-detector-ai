@@ -41,6 +41,7 @@ def subdivide_bbox(gdf, nx=2, ny=2):
     """
     # Pega o bounding box total do gdf
     minx, miny, maxx, maxy = gdf.total_bounds  # (minx, miny, maxx, maxy)
+    print('minx, miny, maxx, maxy:', minx, miny, maxx, maxy)
 
     dx = (maxx - minx) / nx  # Largura de cada tile
     dy = (maxy - miny) / ny  # Altura de cada tile
@@ -173,6 +174,40 @@ def fetch_gee_data_with_shp(credentials='assets/lulc-piabanha-credentials.json',
             scale=scale,
             crs="EPSG:4326"
         )
+
+# def fetch_mapbiomas_data_with_shp(shapefile_path="assets/fmp_shapes/FMP_poligonos_wgs84_utm23s_1.shp", output_folder='piabanha'):
+#     credentials='assets/lulc-piabanha-credentials.json'
+#     initialize_earth_engine(credentials)
+#     # Definir a coleção do MapBiomas
+#     mapbiomas_collection = ee.Image("projects/mapbiomas-workspace/public/collection8/mapbiomas_collection80_integration_v1")
+
+#     # Criar uma região de interesse (ROI) a partir da bounding box
+    
+#     gdf = read_shapefile(shapefile_path)
+#     bbox = gdf.total_bounds
+#     roi = ee.Geometry.BBox(*[bbox[0], bbox[1], bbox[2], bbox[3]])
+
+#     # Cortar os dados de cobertura do solo pela ROI
+#     mapbiomas_clipped = mapbiomas_collection.clip(roi)
+
+#     output_filename = 'mapbiomas_lulc'
+
+#     # Configurar a exportação para o Google Drive
+#     task = ee.batch.Export.image.toDrive(
+#         image=mapbiomas_clipped,
+#         description='MapBiomas_Cobertura_Solo',
+#         folder=output_folder,
+#         fileNamePrefix=output_filename,
+#         region=roi.getInfo()['coordinates'],  # Região da bounding box
+#         scale=30,  # Resolução em metros
+#         crs='EPSG:4674',  # Sistema de referência (SIRGAS 2000)
+#         maxPixels=1e13  # Permitir grandes volumes de dados
+#     )
+
+#     # Iniciar a tarefa de exportação
+#     task.start()
+#     print(f"Tarefa iniciada! O raster será salvo na pasta '{output_folder}' no Google Drive com o nome '{output_filename}'.")
+
 
 if __name__ == "__main__":
     fetch_gee_data_with_shp()

@@ -85,9 +85,13 @@ def visualize_raster(raster_path):
 
 def main():
     # Parâmetros
-    raster_path = "exports/model_30_epochs_mosaic.tif" # GeoTIFF já unificado
+    # raster_path = "exports/model_30_epochs_mosaic.tif" # GeoTIFF já unificado
+    # shapefile_path = 'assets/fmp_shapes/FMP_poligonos_wgs84_utm23s_1.shp' # shapefile de recorte
+    # output_path = "exports/model_30_epochs_cropped_mask.tif"
+
+    raster_path = "fmp_mapbiomas_rgb.tif" # GeoTIFF já unificado
     shapefile_path = 'assets/fmp_shapes/FMP_poligonos_wgs84_utm23s_1.shp' # shapefile de recorte
-    output_path = "exports/model_30_epochs_cropped_mask.tif"
+    output_path = "fmp_mapbiomas_rgb_cropped.tif"
     
     # Realizar recorte
     crop_raster_with_shapefile(raster_path, shapefile_path, output_path)

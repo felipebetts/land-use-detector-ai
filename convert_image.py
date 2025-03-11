@@ -88,8 +88,8 @@ def png_to_geotiff(png_path, output_path, original_tif_path, bands=[1, 2, 3]):
 
 if __name__ == "__main__":
     # Configuração de entrada e saída
-    input_tif = "exports/FMP_v3.tif"  # Caminho para o mosaico GeoTIFF
-    output_png = "exports/FMP_v3.png"  # Caminho para salvar o PNG
+    # input_tif = "exports/FMP_v3.tif"  # Caminho para o mosaico GeoTIFF
+    # output_png = "exports/FMP_v3.png"  # Caminho para salvar o PNG
 
     # Converter o mosaico para PNG
     # geotiff_to_png(input_tif, output_png, bands=[4, 3, 2], stretch=True)
